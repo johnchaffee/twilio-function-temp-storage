@@ -26,7 +26,7 @@ exports.handler = function (context, event, callback) {
   console.log("tempFile: " + tempFile);
 
   /* We create a text file and we put some data in it*/
-  fs.appendFile(tempFile, 'Hello World!\n', (err) => {
+  fs.appendFile(tempFile, new Date().toISOString().slice(0, -5) + "\n", (err) => {
       if (err) return callback(err);
 
       const catFile = fs.readFileSync(tempFile, "utf8");
