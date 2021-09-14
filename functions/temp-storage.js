@@ -9,26 +9,37 @@
  */
 
 const fs = require('fs');
-const path = require('path');
+// const path = require('path');
 const os = require('os');
 
 exports.handler = function (context, event, callback) {
+
+  console.log("CONTEXT:");
+  console.log(context);
+  console.log("EVENT:");
+  console.log(event);
+
+  // const data = event.Body + "\n";
+  const tempDir = os.tmpdir();
+  console.log("temp directory: " + tempDir);
+  const tempFile = tempDir + "/tempfile.txt";
+  console.log("tempFile: " + tempFile);
+  const catFile = fs.readFileSync(tempFile, "utf8");
+  console.log("catFile: " + catFile);
+
   /* We create a text file and we put some data in it*/
-  fs.writeFile(
-    path.join(os.tmpdir(), 'test_file.txt'),
-    'Contents of created file in OS temp directory',
-    // eslint-disable-next-line consistent-return
-    function (err) {
+  fs.appendFile(tempFile, 'Hello World!\n', (err) => {
       if (err) return callback(err);
 
-      /* We read the contents of the temporary directory to check that the file was created. For multiple files you can create a loop*/
+      // We read the contents of the temporary directory
+      // For multiple files you can create a loop
       fs.readdir(os.tmpdir(), function (err, files) {
         if (err) return callback(err);
-
         return callback(
           null,
-          `File created in temporary directory: ${files.join(', ')}`
-        );
+          `Files in temporary directory:\n\n ${files.join('\n ')} \n\n` +
+          `Contents of tempFile:\n\n${catFile}`
+          );
       });
     }
   );
