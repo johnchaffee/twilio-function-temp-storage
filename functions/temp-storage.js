@@ -24,13 +24,14 @@ exports.handler = function (context, event, callback) {
   console.log("temp directory: " + tempDir);
   const tempFile = tempDir + "/tempfile.txt";
   console.log("tempFile: " + tempFile);
-  const catFile = fs.readFileSync(tempFile, "utf8");
-  console.log("catFile: " + catFile);
 
   /* We create a text file and we put some data in it*/
   fs.appendFile(tempFile, 'Hello World!\n', (err) => {
       if (err) return callback(err);
 
+      const catFile = fs.readFileSync(tempFile, "utf8");
+      console.log("catFile: " + catFile);
+    
       // We read the contents of the temporary directory
       // For multiple files you can create a loop
       fs.readdir(os.tmpdir(), function (err, files) {
